@@ -1,11 +1,17 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+interface User {
+  id: string;
+  username: string;
+  password: string;
+}
+
 interface Song {
   id: string;
   title: string;
   artist: string;
-  addedBy: string;
+  genre: string;
   createdAt: Date;
 }
 
@@ -13,9 +19,9 @@ interface UserProfile {
   id: string;
   username: string;
   bio: string;
-  favoriteSongs: Song[];
-  connections: string[]; // Array of user IDs
-  avatarUrl?: string;
+  favoriteGenres: string[];
+  favoriteSingers: string[];
+  connections: string[];
 }
 
 interface Message {
@@ -24,70 +30,140 @@ interface Message {
   receiverId: string;
   content: string;
   timestamp: Date;
+  read: boolean;
+}
+
+interface Comment {
+  id: string;
+  content: string;
+}
+
+interface Post {
+  id: string;
+  userId: string;
+  content: string;
+  likes: string[];
+  comments: Comment[];
+  createdAt: Date;
 }
 
 interface MusicStoreState {
-  currentUser: UserProfile | null;
-  users: UserProfile[];
-  messages: Message[];
+  currentUser: User | null;
   songs: Song[];
-  // Actions
-  addSong: (song: Omit<Song, 'id' | 'createdAt'>) => void;
-  removeSong: (songId: string) => void;
-  updateProfile: (profile: Partial<UserProfile>) => void;
-  addConnection: (userId: string) => void;
-  removeConnection: (userId: string) => void;
+  messages: Message[];
+  posts: Post[];
+  availableGenres: string[];
+  addSong: (songData: SongData) => void;
   sendMessage: (receiverId: string, content: string) => void;
+  updateUserProfile: (updates: UserProfileUpdates) => void;
+  login: (username: string, password: string) => Promise<void>;
+  markMessageAsRead: (messageId: string) => void;
+  createPost: (content: string) => void;
+  likePost: (postId: string) => void;
+  addComment: (postId: string, content: string) => void;
+  deleteSong: (id: string) => void;
+  deleteComment: (postId: string, commentId: string) => void;
+}
+
+interface SongData {
+  title: string;
+  artist: string;
+  genre: string;
+}
+
+interface UserProfileUpdates {
+  username: string;
+  bio: string;
+  favoriteSingers: string[];
+  connections: string[];
 }
 
 export const useMusicStore = create<MusicStoreState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       currentUser: null,
-      users: [],
-      messages: [],
       songs: [],
+      messages: [],
+      posts: [],
+      availableGenres: [
+        'Pop', 'Rock', 'Hip Hop', 'R&B', 'Jazz', 
+        'Classical', 'Electronic', 'Country', 'Folk',
+        'Metal', 'Blues', 'Reggae', 'Latin', 'K-pop'
+      ],
 
-    addSong: (songData) => set((state) => ({
-      songs: [...state.songs, {
-        ...songData,
-        id: crypto.randomUUID(),
-        createdAt: new Date(),
-        addedBy: state.currentUser?.id || ''
-      }]
-    })),
+      createPost: (content: string) => set((state) => ({
+        posts: [...state.posts, {
+          id: crypto.randomUUID(),
+          userId: state.currentUser?.id || '',
+          content,
+          likes: [],
+          comments: [],
+          createdAt: new Date()
+        }]
+      })),
 
-    removeSong: (songId) => set((state) => ({
-      songs: state.songs.filter(song => song.id !== songId)
-    })),
+      likePost: (postId: string) => set((state) => ({
+        posts: state.posts.map(post =>
+          post.id === postId ? { ...post, likes: [...post.likes, state.currentUser?.id || ''] } : post
+        )
+      })),
 
-    updateProfile: (profile) => set((state) => ({
-      currentUser: state.currentUser ? { ...state.currentUser, ...profile } : null
-    })),
+      addSong: (songData: SongData) => set((state) => ({
+        songs: [...state.songs, {
+          id: crypto.randomUUID(),
+          ...songData,
+          createdAt: new Date()
+        }]
+      })),
 
-    addConnection: (userId) => set((state) => ({
-      currentUser: state.currentUser ? {
-        ...state.currentUser,
-        connections: [...state.currentUser.connections, userId]
-      } : null
-    })),
+      sendMessage: (receiverId: string, content: string) => set((state) => ({
+        messages: [...state.messages, {
+          id: crypto.randomUUID(),
+          senderId: state.currentUser?.id || '',
+          receiverId,
+          content,
+          timestamp: new Date(),
+          read: false
+        }]
+      })),
 
-    removeConnection: (userId) => set((state) => ({
-      currentUser: state.currentUser ? {
-        ...state.currentUser,
-        connections: state.currentUser.connections.filter(id => id !== userId)
-      } : null
-    })),
+      updateUserProfile: (updates: UserProfileUpdates) => set((state) => ({
+        currentUser: state.currentUser ? {
+          ...state.currentUser,
+          ...updates
+        } : null
+      })),
 
-    sendMessage: (receiverId, content) => set((state) => ({
-      messages: [...state.messages, {
-        id: crypto.randomUUID(),
-        senderId: state.currentUser?.id || '',
-        receiverId,
-        content,
-        timestamp: new Date()
-      }]
-    }))
+      login: async (username: string, password: string) => {
+        await Promise.resolve();
+      },
+
+      markMessageAsRead: (messageId: string) => set((state) => ({
+        messages: state.messages.map(message =>
+          message.id === messageId ? { ...message, read: true } : message
+        )
+      })),
+
+      addComment: (postId: string, content: string) => set((state) => ({
+        posts: state.posts.map(post =>
+          post.id === postId ? { ...post, comments: [...post.comments, { id: crypto.randomUUID(), content }] } : post
+        )
+      })),
+
+      deleteSong: (id: string) => set((state) => ({
+        songs: state.songs.filter(song => song.id !== id)
+      })),
+
+      deleteComment: (postId: string, commentId: string) => set((state) => ({
+        posts: state.posts.map(post => 
+          post.id === postId 
+            ? {
+                ...post,
+                comments: post.comments.filter(comment => comment.id !== commentId)
+              }
+            : post
+        )
+      }))
     }),
     {
       name: 'music-store'

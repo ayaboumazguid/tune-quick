@@ -1,3 +1,5 @@
+import { User } from '../types';
+
 const BASE_URL = 'your-api-url';
 
 export const api = {
@@ -6,7 +8,7 @@ export const api = {
     return response.json();
   },
   
-  updateProfile: async (profile: Partial<UserProfile>) => {
+  updateProfile: async (profile: Partial<User>) => {
     const response = await fetch(`${BASE_URL}/profile`, {
       method: 'PUT',
       body: JSON.stringify(profile)

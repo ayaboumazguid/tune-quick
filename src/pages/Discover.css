@@ -1,0 +1,246 @@
+.discover-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.search-section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  background: #282828;
+  border: 1px solid #404040;
+  color: white;
+  font-size: 16px;
+}
+
+.genre-filter {
+  padding: 12px;
+  border-radius: 8px;
+  background: #282828;
+  border: 1px solid #404040;
+  color: white;
+  min-width: 150px;
+  cursor: pointer;
+}
+
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.song-card {
+  background: #282828;
+  padding: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.song-card:hover {
+  transform: translateY(-5px);
+}
+
+.song-card h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.artist {
+  color: #b3b3b3;
+  margin: 8px 0;
+}
+
+.genre-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #1db954;
+  color: white;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+
+.discover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-song-btn {
+  padding: 10px 20px;
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-song-btn:hover {
+  background: #1ed760;
+}
+
+.add-song-section {
+  background: #282828;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.add-song-form {
+  margin-top: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.input-field {
+  flex: 1;
+  padding: 12px;
+  background: #121212;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+}
+
+.genre-select {
+  min-width: 150px;
+  padding: 12px;
+  background: #121212;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.add-btn {
+  padding: 12px 24px;
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.input-field:focus,
+.genre-select:focus {
+  outline: none;
+  border-color: #1db954;
+}
+
+.add-btn:hover {
+  background: #1ed760;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.add-song-modal {
+  background: #282828;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #808080;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  background: #121212;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  color: white;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.search-bar {
+  margin: 20px 0;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px;
+  background: #282828;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+}
+
+.song-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #808080;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.delete-btn:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+}

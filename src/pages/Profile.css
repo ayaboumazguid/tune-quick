@@ -1,0 +1,79 @@
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-info {
+  background: #282828;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.bio-edit {
+  margin: 1rem 0;
+}
+
+.bio-edit textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border-radius: 4px;
+  background: #121212;
+  color: white;
+  border: 1px solid #404040;
+  margin-bottom: 10px;
+  resize: vertical;
+}
+
+.bio-display {
+  margin: 1rem 0;
+}
+
+.edit-button,
+.save-button,
+.toggle-genres-button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.edit-button {
+  background: #404040;
+  color: white;
+}
+
+.save-button {
+  background: #1db954;
+  color: white;
+}
+
+.toggle-genres-button {
+  background: #404040;
+  color: white;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.genre-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 1rem 0;
+}
+
+.genre-tag {
+  background: #1db954;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+}
+
+.selected-genres {
+  margin-top: 2rem;
+}
