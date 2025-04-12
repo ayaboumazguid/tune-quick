@@ -1,0 +1,7 @@
+{
+  "name": "tunequick",
+  "plan": {
+    "description": "TuneQuick is a music based social networking pp that connects people through their favourite songs! It evokes the feel of platforms like spotify combined with social elements from instagram or twitter, but with a focused music discovery andgle"
+  },
+  "template": "react"
+}
