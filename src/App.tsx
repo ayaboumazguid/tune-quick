@@ -1,12 +1,12 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import { HelloWorld } from "./views";
+import * as React from "react";
+import { BrowserRouter } from 'react-router-dom';
+import { Navigation } from './components/Navigation';
 
-const App: React.FC = () => {
+export const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<HelloWorld />} />
-    </Routes>
+    <BrowserRouter>
+      <Navigation />
+    </BrowserRouter>
   );
 };
 
