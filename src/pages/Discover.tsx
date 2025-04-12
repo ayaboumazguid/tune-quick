@@ -2,9 +2,9 @@ import * as React from 'react';
 
 export const Discover = () => {
   return (
-    <div>
+    <main>
       <h1>Discover New Music</h1>
-    </div>
+    </main>
   );
 };
 

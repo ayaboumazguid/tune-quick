@@ -1,4 +1,4 @@
-import { useMusicStore } from '../store/musicStore';
+import { useMusicStore } from '../stores/musicStore';
 
 export const authService = {
   login: async (username: string, password: string) => {

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useMusicStore } from '../store/musicStore';
+import * as React from 'react';
+import { useMusicStore } from '../stores/musicStore';
 
 interface SongCardProps {
   song: {

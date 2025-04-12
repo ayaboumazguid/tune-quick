@@ -1,18 +1,17 @@
 import * as React from 'react';
-import { useMusicStore } from '../store/musicStore';
 
 export const Profile = () => {
-  const { currentUser } = useMusicStore();
-  
   return (
-    <div>
-      <h1>Profile</h1>
-      {currentUser && (
-        <div>
-          <h2>{currentUser.username}</h2>
-          <p>{currentUser.bio}</p>
-        </div>
-      )}
-    </div>
+    <main>
+      <h1>Your Profile</h1>
+    </main>
+  );
+};
+
+export const Discover = () => {
+  return (
+    <main>
+      <h1>Discover New Music</h1>
+    </main>
   );
 };

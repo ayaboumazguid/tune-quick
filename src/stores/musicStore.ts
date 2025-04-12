@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { sync } from '@tonk/keepsync';
+import { persist } from 'zustand/middleware';
 
 interface Song {
   id: string;
@@ -40,8 +40,8 @@ interface MusicStoreState {
   sendMessage: (receiverId: string, content: string) => void;
 }
 
-export const useMusicStore = create<MusicStoreState>(
-  sync(
+export const useMusicStore = create<MusicStoreState>()(
+  persist(
     (set, get) => ({
       currentUser: null,
       users: [],
@@ -90,7 +90,7 @@ export const useMusicStore = create<MusicStoreState>(
     }))
     }),
     {
-      docId: "music-store"
+      name: 'music-store'
     }
   )
 );
