@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { SongData, Post as ImportedPost, MusicStoreState } from '../types';
 
 interface User {
   id: string;
@@ -65,12 +66,6 @@ interface MusicStoreState {
   deleteComment: (postId: string, commentId: string) => void;
 }
 
-interface SongData {
-  title: string;
-  artist: string;
-  genre: string;
-}
-
 interface UserProfileUpdates {
   username: string;
   bio: string;
@@ -86,40 +81,25 @@ export const useMusicStore = create<MusicStoreState>()(
       messages: [],
       posts: [],
       availableGenres: [
-        'Pop', 'Rock', 'Hip Hop', 'R&B', 'Jazz', 
-        'Classical', 'Electronic', 'Country', 'Folk',
-        'Metal', 'Blues', 'Reggae', 'Latin', 'K-pop'
+        'Pop', 'Rock', 'Hip Hop', 'R&B', 'Jazz',
+        'Classical', 'Electronic', 'Country', 'Folk'
       ],
 
-      createPost: (content: string) => set((state) => ({
-        posts: [...state.posts, {
-          id: crypto.randomUUID(),
-          userId: state.currentUser?.id || '',
-          content,
-          likes: [],
-          comments: [],
-          createdAt: new Date()
-        }]
+      addSong: (songData) => set((state) => ({
+        songs: [
+          {
+            ...songData,
+            id: crypto.randomUUID(),
+            createdAt: new Date()
+          },
+          ...state.songs
+        ]
       })),
 
-      likePost: (postId: string) => set((state) => ({
-        posts: state.posts.map(post =>
-          post.id === postId ? { ...post, likes: [...post.likes, state.currentUser?.id || ''] } : post
-        )
-      })),
-
-      addSong: (songData: SongData) => set((state) => ({
-        songs: [...state.songs, {
-          id: crypto.randomUUID(),
-          ...songData,
-          createdAt: new Date()
-        }]
-      })),
-
-      sendMessage: (receiverId: string, content: string) => set((state) => ({
+      sendMessage: (receiverId, content) => set((state) => ({
         messages: [...state.messages, {
           id: crypto.randomUUID(),
-          senderId: state.currentUser?.id || '',
+          senderId: state.currentUser?.id ?? '',
           receiverId,
           content,
           timestamp: new Date(),
@@ -127,42 +107,41 @@ export const useMusicStore = create<MusicStoreState>()(
         }]
       })),
 
-      updateUserProfile: (updates: UserProfileUpdates) => set((state) => ({
-        currentUser: state.currentUser ? {
-          ...state.currentUser,
-          ...updates
-        } : null
+      updateUserProfile: (updates) => set((state) => ({
+        currentUser: state.currentUser ? { ...state.currentUser, ...updates } : null
       })),
 
-      login: async (username: string, password: string) => {
-        await Promise.resolve();
-      },
+      login: async (username, password) => set({ currentUser: { id: crypto.randomUUID(), username, password } }),
 
-      markMessageAsRead: (messageId: string) => set((state) => ({
-        messages: state.messages.map(message =>
-          message.id === messageId ? { ...message, read: true } : message
-        )
+      markMessageAsRead: (messageId) => set((state) => ({
+        messages: state.messages.map(m => m.id === messageId ? { ...m, read: true } : m)
       })),
 
-      addComment: (postId: string, content: string) => set((state) => ({
-        posts: state.posts.map(post =>
-          post.id === postId ? { ...post, comments: [...post.comments, { id: crypto.randomUUID(), content }] } : post
-        )
+      createPost: (content) => set((state) => ({
+        posts: [...state.posts, {
+          id: crypto.randomUUID(),
+          userId: state.currentUser?.id ?? '',
+          content,
+          likes: [],
+          comments: [],
+          createdAt: new Date()
+        }]
       })),
 
-      deleteSong: (id: string) => set((state) => ({
+      likePost: (postId) => set((state) => ({
+        posts: state.posts.map(p => p.id === postId ? { ...p, likes: [...p.likes, state.currentUser?.id ?? ''] } : p)
+      })),
+
+      addComment: (postId, content) => set((state) => ({
+        posts: state.posts.map(p => p.id === postId ? { ...p, comments: [...p.comments, { id: crypto.randomUUID(), content }] } : p)
+      })),
+
+      deleteSong: (id) => set((state) => ({
         songs: state.songs.filter(song => song.id !== id)
       })),
 
-      deleteComment: (postId: string, commentId: string) => set((state) => ({
-        posts: state.posts.map(post => 
-          post.id === postId 
-            ? {
-                ...post,
-                comments: post.comments.filter(comment => comment.id !== commentId)
-              }
-            : post
-        )
+      deleteComment: (postId, commentId) => set((state) => ({
+        posts: state.posts.map(p => p.id === postId ? { ...p, comments: p.comments.filter(c => c.id !== commentId) } : p)
       }))
     }),
     {

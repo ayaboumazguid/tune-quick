@@ -3,6 +3,11 @@ import { useState } from 'react';
 import { useMusicStore } from '../stores/musicStore';
 import './StartConversation.css';
 
+interface User {
+  id: string;
+  username: string;
+}
+
 interface StartConversationProps {
   onClose: () => void;
   onSelectUser: (userId: string) => void;
@@ -12,45 +17,33 @@ export const StartConversation: React.FC<StartConversationProps> = ({
   onClose,
   onSelectUser,
 }) => {
-  const { users, currentUser } = useMusicStore();
+  const { users = [] } = useMusicStore();
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredUsers = users.filter(user => 
-    user.id !== currentUser?.id &&
     user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="start-conversation">
-      <div className="search-header">
-        <h3>New Conversation</h3>
-        <button className="close-btn" onClick={onClose}>×</button>
+    <div className="conversation-modal">
+      <div className="modal-header">
+        <h2>Start a Conversation</h2>
+        <button onClick={onClose}>×</button>
       </div>
-      
       <input
         type="text"
-        placeholder="Search users..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="user-search"
+        placeholder="Search users..."
       />
-
-      <div className="users-results">
+      <div className="users-list">
         {filteredUsers.map(user => (
           <button
             key={user.id}
-            className="user-result-item"
             onClick={() => onSelectUser(user.id)}
+            className="user-item"
           >
-            <div className="user-avatar">
-              {user.username[0].toUpperCase()}
-            </div>
-            <div className="user-info">
-              <span className="user-name">{user.username}</span>
-              {user.bio && (
-                <span className="user-bio">{user.bio}</span>
-              )}
-            </div>
+            {user.username}
           </button>
         ))}
       </div>

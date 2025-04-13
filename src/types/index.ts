@@ -34,12 +34,9 @@ export interface Comment {
 }
 
 export interface MusicStoreState {
-  currentUser: User | null;
-  users: User[];
+  users: { id: string; username: string }[];
   songs: SongData[];
   posts: Post[];
   availableGenres: string[];
-  updateUserPreferences: (preferences: { genres?: string[] }) => void;
-  updateUserCredentials: (updates: { username?: string; password?: string }) => void;
-  addSong: (song: Omit<SongData, 'id' | 'createdAt' | 'addedBy'>) => void;
+  addSong: (song: Omit<SongData, 'id' | 'createdAt'>) => void;
 }

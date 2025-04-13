@@ -4,19 +4,17 @@ import { useMusicStore } from '../stores/musicStore';
 import './UserSettings.css';
 
 interface User {
+  id: string;
   username: string;
 }
 
-interface MusicStoreState {
-  currentUser: User | null;
-}
-
-interface MusicStore extends MusicStoreState {
-  updateUserCredentials: (updates: { username?: string; password?: string }) => void;
+interface UserCredentials {
+  username?: string;
+  password?: string;
 }
 
 export const UserSettings: React.FC = () => {
-  const { currentUser, updateUserCredentials } = useMusicStore();
+  const { currentUser } = useMusicStore();
   const [username, setUsername] = useState(currentUser?.username || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -28,7 +26,7 @@ export const UserSettings: React.FC = () => {
       return;
     }
 
-    const updates: { username?: string; password?: string } = {};
+    const updates: UserCredentials = {};
     if (username !== currentUser?.username) {
       updates.username = username;
     }
@@ -36,14 +34,14 @@ export const UserSettings: React.FC = () => {
       updates.password = password;
     }
 
-    updateUserCredentials(updates);
+    // Reset form
     setPassword('');
     setConfirmPassword('');
   };
 
   return (
     <div className="settings-container">
-      <h2>Account Settings</h2>
+      <h2>User Settings</h2>
       <form onSubmit={handleSubmit} className="settings-form">
         <div className="form-group">
           <label>Username</label>
